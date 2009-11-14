@@ -1,0 +1,60 @@
+Hand Rolled PHP Data Mapper Classes
+==================================
+
+Abstract superclasses using mysqli for quick and dirty database access.
+
+Example:
+
+create table pages (
+  id int(11) auto_increment primary key not null,
+  title varchar(255),
+  body text
+);
+
+<?php
+  require 'model.php';
+  require 'mapper.php';
+
+  class Page extends Model {
+    protected function mapper() {
+      return new PageMapper();
+    }
+  }
+
+  class PageMapper extends Mapper {
+    function table_name() {
+      return 'pages';
+    }
+
+    functon do_create_object( $array ) {
+      $page = new Page();
+      $page->set_fields( $array );
+      return $page;
+    }
+  }
+?>
+
+With just the above, you can now do fun things like this:
+
+<?php
+
+  $page = new Page();
+  $page->title( 'A Great Page' );
+  $page->body( 'Some Body Text' );
+  $page->save();
+
+?>
+
+and this:
+
+$pm = new PageMapper();
+$pages = $pm->find_all();
+
+or this:
+
+$page = $pm->find_one_by( 'title', 'A Great Page' );
+
+or even this:
+
+$page = $pm->find_one_by_sql( "body like '%Text'" );
+

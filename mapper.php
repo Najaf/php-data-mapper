@@ -11,10 +11,14 @@
 
     private $db; //MySQLi instance
     private $table_fields;
+
+    /**
+     * Caches all query results as 'query' => 'result'
+     */
     private $query_cache = array();
 
     function __construct() {
-      $this->db = Registry::instance()->db();
+      $this->db = new MySQLi( $host, $user, $pass, $db ); 
       $this->init_table_fields();
       $this->query_cache = array( 'init' => 'init' );
     }
